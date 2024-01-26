@@ -1,0 +1,5 @@
+rm -rf [0-9].*
+rm -rf [0-9]
+rm -r processor*
+rm run.log
+rm log.liggghts
