@@ -1,0 +1,7 @@
+To get container with the solver code
+`docker push asarmakeeva/cfdem_ib:v5`
+
+Folders:
+- cases: running test cases
+- forcemodels: 2 force models to provide coupling which could be compiled in CFDEMcoupling
+- solvers: solvers code for 2 different algorithms for free surface reconstruction
