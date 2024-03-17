@@ -2,8 +2,8 @@ just reminder what I added to InterFlow solver,
 IsoFoam should be installed, and could be downloaded from github https://github.com/isoAdvector/isoAdvector
 
 to add particles into openFOAM solver
-
-`#include "cfdemCloudIB.H"
+```cpp
+#include "cfdemCloudIB.H"
 #include "implicitCouple.H"
 
 #include "averagingModel.H"
@@ -25,18 +25,18 @@ cfdemCloudIB particleCloud(mesh);
         Info << "- evolve()" << endl;
         particleCloud.evolve();
         volScalarField voidfractionNext=mesh.lookupObject<volScalarField>("voidfractionNext");`
-
+```
 and inside pimple loop at the end
 
-`
+```
 particleCloud.calcCorrectionTerm(U,voidfractionNext,H);
 Info << "particleCloud.calcVelocityCorrection() " << endl;
-`
+```
 
 also you need to add additional fields in createFields.H
 
-
-`volVectorField H
+```
+volVectorField H
 (
     IOobject
     (
@@ -110,14 +110,13 @@ dimensionedScalar partDens("0", dimensionSet(1, -3, 0, 0, 0), 750);
         mesh,
         dimensionedScalar("0", dimensionSet(0, 0, 0, 0, 0), 0.0)
     );
-`
+```
 in alphaEqnSubCycle.H at end add
 
-`
+```
 rho == alpha1*rho1 + alpha2*rho2;
-
 rho += (1.0-voidfractionNext)*partDens;
-`
+```
 add in UEqn + H
 
 
