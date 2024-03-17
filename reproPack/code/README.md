@@ -1,5 +1,5 @@
 To get container with the solver code
-`docker push asarmakeeva/cfdem_ib:v5`
+`docker pull asarmakeeva/cfdem_ib:v5`
 
 Folders:
 - cases: running test cases
