@@ -1,9 +1,9 @@
 just reminder what I added to InterFlow solver, 
-IsoFoam should be installed, and could be donwloaded from github https://github.com/isoAdvector/isoAdvector
+IsoFoam should be installed, and could be downloaded from github https://github.com/isoAdvector/isoAdvector
 
-to add paricles into openFOAM solver
-`
-#include "cfdemCloudIB.H"
+to add particles into openFOAM solver
+
+`#include "cfdemCloudIB.H"
 #include "implicitCouple.H"
 
 #include "averagingModel.H"
@@ -32,10 +32,11 @@ and inside pimple loop at the end
 particleCloud.calcCorrectionTerm(U,voidfractionNext,H);
 Info << "particleCloud.calcVelocityCorrection() " << endl;
 `
+
 also you need to add additional fields in createFields.H
 
-`
-volVectorField H
+
+`volVectorField H
 (
     IOobject
     (
@@ -114,6 +115,7 @@ in alphaEqnSubCycle.H at end add
 
 `
 rho == alpha1*rho1 + alpha2*rho2;
+
 rho += (1.0-voidfractionNext)*partDens;
 `
 add in UEqn + H
