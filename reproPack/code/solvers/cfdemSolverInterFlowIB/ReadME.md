@@ -1,7 +1,8 @@
 just reminder what I added to InterFlow solver, 
 IsoFoam should be installed, and could be donwloaded from github https://github.com/isoAdvector/isoAdvector
 
-to add paricles into openFOam solver i need
+to add paricles into openFOAM solver
+`
 #include "cfdemCloudIB.H"
 #include "implicitCouple.H"
 
@@ -23,17 +24,17 @@ cfdemCloudIB particleCloud(mesh);
 
         Info << "- evolve()" << endl;
         particleCloud.evolve();
-        volScalarField voidfractionNext=mesh.lookupObject<volScalarField>("voidfractionNext");
+        volScalarField voidfractionNext=mesh.lookupObject<volScalarField>("voidfractionNext");`
 
 and inside pimple loop at the end
 
-
+`
 particleCloud.calcCorrectionTerm(U,voidfractionNext,H);
 Info << "particleCloud.calcVelocityCorrection() " << endl;
+`
+also you need to add additional fields in createFields.H
 
-also you need to add aditional fields in createFields.H
-
-
+`
 volVectorField H
 (
     IOobject
@@ -50,8 +51,6 @@ volVectorField H
 
 dimensionedScalar partDens("0", dimensionSet(1, -3, 0, 0, 0), 750);
 
-    
-//mod by alice
     Info<< "Reading physical velocity field U" << endl;
     Info<< "Note: only if voidfraction at boundary is 1, U is superficial velocity!!!\n" << endl;
     volVectorField Us
@@ -81,8 +80,6 @@ dimensionedScalar partDens("0", dimensionSet(1, -3, 0, 0, 0), 750);
         mesh
     );
 
-
-    //mod by alice
     Info<< "Reading field phiIB\n" << endl;
     volScalarField voidfraction
     (
@@ -112,27 +109,30 @@ dimensionedScalar partDens("0", dimensionSet(1, -3, 0, 0, 0), 750);
         mesh,
         dimensionedScalar("0", dimensionSet(0, 0, 0, 0, 0), 0.0)
     );
-
+`
 in alphaEqnSubCycle.H at end add
 
-
+`
 rho == alpha1*rho1 + alpha2*rho2;
 rho += (1.0-voidfractionNext)*partDens;
-
+`
 add in UEqn + H
 
 
 
 in option include
 
-    -I$(CFDEM_OFVERSION_DIR) \
-    -I$(CFDEM_OFVERSION_DIR) \
+-I$(CFDEM_OFVERSION_DIR) \
+-I$(CFDEM_OFVERSION_DIR) \
 
 and include links
 -L$(CFDEM_LIB_DIR)\
-    -l$(CFDEM_LIB_NAME) \
-     $(CFDEM_ADD_LIB_PATHS) \
-     $(CFDEM_ADD_LIBS)
+-l$(CFDEM_LIB_NAME) \
+$(CFDEM_ADD_LIB_PATHS) \
+$(CFDEM_ADD_LIBS)
+
+
+after in the folder where main solver code run wmake command
 
 
 
